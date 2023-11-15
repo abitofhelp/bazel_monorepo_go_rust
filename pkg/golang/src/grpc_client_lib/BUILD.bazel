@@ -1,0 +1,19 @@
+## BUILD.bazel
+
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "grpc_client_lib",
+    srcs = ["lib.go"],
+    importpath = "github.com/abitofhelp/bazel_monorepo_go_rust/pkg/golang/src/grpc_client_lib",
+    deps = ["@com_github_dustin_go_humanize//:go-humanize"],
+)
+
+go_test(
+    name = "grpc_client_lib_test",
+    srcs = ["lib_test.go"],
+    embed = [":grpc_client_lib"],
+    deps = ["@com_github_stretchr_testify//assert"],
+)

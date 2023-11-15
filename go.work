@@ -1,0 +1,5 @@
+// GO.WORK
+
+go 1.21.3
+
+use ./pkg/golang/src/grpc_client_lib

@@ -1,0 +1,16 @@
+[workspace]
+resolver = "2"
+members = [
+    "pkg/rust/src/grpc_client_lib",
+]
+
+[workspace.package]
+authors = ["Michael Gardner <mjgardner@abitofhelp.com>"]
+description = "This is a simple example of a monorepo, polyglot project that can be built by Bazel, Go Build, or Cargo.  Please visit the repository to view the complete solution."
+edition = "2021"
+homepage = "https://www.abitofhelp.com"
+keywords = ["rust", "go", "bazel"]
+license-file = "LICENSE"
+readme = "README.md"
+repository = "https://github.com/abitofhelp/bazel_monorepo_go_rust.git"
+rust-version = "1.73.0"
