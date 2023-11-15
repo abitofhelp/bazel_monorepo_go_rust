@@ -9,10 +9,7 @@ GO_VERSION = "1.21.3"
 
 RULES_GO_VERSION = "0.42.0"
 
-RUST_VERSIONS = [
-    "1.73.0",
-    "nightly/2023-11-12",
-]
+RUST_VERSIONS = [ "1.73.0", "nightly/2023-11-12" ]
 
 RULES_RUST_VERSION = "0.30.0"
 
@@ -69,10 +66,7 @@ rules_rust_dependencies()
 
 rust_register_toolchains(
     edition = "2021",
-    versions = [
-        "1.73.0",
-        "nightly/2023-11-12",
-    ],
+    versions = RUST_VERSIONS,
 )
 
 ## CRATE_UNIVERSE
