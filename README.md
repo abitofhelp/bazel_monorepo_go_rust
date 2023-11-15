@@ -23,6 +23,7 @@ The Makefile contains many queries and commands for using the native tools for G
   * Amend the files for the new project's needs.
   * Add the relative path to the new project to the use() in go.work.
     * i.e. /pkg/golang/src/mynewproject
+  * You may want to clone the build_grpc_golang_client_lib command in the Makefile for directly building the new project.
   * Verify that you can build the Go projects by executing the go_build_all (go build used) command in the Makefile.
   * Verify that you can build the Go projects by executing the build_all (bazel used) command in the Makefile.
 
@@ -31,7 +32,7 @@ The Makefile contains many queries and commands for using the native tools for G
 * Clone the files from grpc_client_lib to the new project's directory.
 * Amend the files for the new project's needs.
 * Add the bazel target to the new project to the crates_repository.manifests block in the WORKSPACE file.
-    crates_repository(
+`    crates_repository(
       name = "crate_index",
       cargo_lockfile = "//:Cargo.lock",
       lockfile = "//:cargo-bazel-lock.json",
@@ -40,13 +41,14 @@ The Makefile contains many queries and commands for using the native tools for G
         "//:pkg/rust/src/grpc_client_lib/Cargo.toml",
         "//:pkg/rust/src/mynewproject/Cargo.toml",
       ],
-    )
+    )`
+  * You may want to clone the build_grpc_rust_client_lib command in the Makefile for directly building the new project.
   * Add the relative path to the new project to the workspace.members block in Cargo.toml file.
-      [workspace]
-        resolver = "2"
-        members = [
-          "pkg/rust/src/grpc_client_lib",
-          "pkg/rust/src/mynewproject",
-        ]
+`        [workspace]
+          resolver = "2"
+          members = [
+            "pkg/rust/src/grpc_client_lib",
+            "pkg/rust/src/mynewproject",
+          ]`
 * Verify that you can build the Rust projects by executing the rust_build_all (Cargo used) command in the Makefile.
 * Verify that you can build the Rust projects by executing the build_all (bazel used) command in the Makefile.
