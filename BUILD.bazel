@@ -6,3 +6,12 @@ load("@bazel_gazelle//:def.bzl", "gazelle")
 # gazelle:prefix github.com/abitofhelp/bazel_monorepo_go_rust
 # gazelle:exclude vendor
 gazelle(name = "gazelle")
+
+
+# Enables `bazel run //:cargo`
+genrule(
+    name = "make_cargo",
+    outs = [":cargo"],
+    cmd = "echo 'PATH=\"$$(dirname $(RUSTC))\" CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse exec $(CARGO) $$@' > $@",
+    toolchains = ["@rules_rust//rust/toolchain:current_rust_toolchain"],
+)

@@ -1,14 +1,15 @@
 # Makefile
 
+PROJECT_NAME=bazel_monorepo_go_rust
+PROJECT_DIR=$(GOPATH)/src/github.com/abitofhelp/$(PROJECT_NAME)
+
 BZLCMD=bazel
 BAZEL_BUILD_OPTS:=--verbose_failures --sandbox_debug
-CARGOCMD=$(BZLCMD) run @rules_rust//cargo
+CARGOCMD=$(BZLCMD) run //:cargo # See genrule named "make_cargo" in the root's BUILD.bazel file.
 GOCMD=$(BZLCMD) run @io_bazel_rules_go//go
 GOLANG_CLIENT_DIR=$(PROJECT_DIR)/pkg/golang/src/grpc_client_lib
 GOLANG_CLIENT_LIB_WORKSPACE=//pkg/golang/src/grpc_client_lib
 GOLANG_CLIENT_LIB_TARGET=$(GOLANG_CLIENT_LIB_WORKSPACE):grpc_client_lib
-PROJECT_NAME=bazel_monorepo_go_rust
-PROJECT_DIR=$(GOPATH)/src/github.com/abitofhelp/$(PROJECT_NAME)
 PROTO_DIR=$(PROJECT_DIR)/proto
 RUST_CLIENT_DIR=$(PROJECT_DIR)/pkg/rust/src/grpc_client_lib
 RUST_CLIENT_LIB_WORKSPACE=//pkg/rust/src/grpc_client_lib
@@ -32,16 +33,16 @@ cargo_build_all:
 	popd;
 
 cargo_clean:
-	@cargo clean
+	$(CARGOCMD) -- clean
 
 cargo_crate_list:
-	@cargo package --list
+	$(CARGOCMD) -- package --list
 
 cargo_crate_pub:
-	@cargo publish -publish $(PROJECT_NAME)
+	$(CARGOCMD) -- publish -publish $(PROJECT_NAME)
 
 cargo_crate_pub_dryrun:
-	@cargo publish --dry-run
+	$(CARGOCMD) -- publish --dry-run
 
 cargo_targets:
 	$(BZLCMD) query "@rules_rust//cargo:*"
@@ -115,6 +116,7 @@ rust_unit_test:
 
 set_golang_version:
 	sed -E -i '.org' 's/go 1.21.3/go 1.21.4/g' "$(PROJECT_DIR)/go.work" && rm "$(PROJECT_DIR)/go.work.org" && \
+	sed -E -i '.org' 's/go 1.21.3/go 1.21.4/g' "$(PROJECT_DIR)/go.mod" && rm "$(PROJECT_DIR)/go.mod.org" && \
 	sed -E -i '.org' 's/GO_VERSION = "1.21.3"/GO_VERSION = "1.21.4"/g' "$(PROJECT_DIR)/WORKSPACE" && rm "$(PROJECT_DIR)/WORKSPACE.org" ;
 
 set_rust_version:
@@ -125,7 +127,7 @@ set_rust_version:
 sync_from_cargo:
 	rm -f cargo-bazel-lock.json
 	touch cargo-bazel-lock.json
-	@CARGO_BAZEL_REPIN=true bazel sync --only=crate_index
+	@CARGO_BAZEL_REPIN=true $(BZLCMD) sync --only=crate_index
 
 sync_from_gomod: go_mod_verify go_mod_tidy gazelle_update_repos go_mod_vendor
 
