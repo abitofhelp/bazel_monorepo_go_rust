@@ -2,6 +2,13 @@
 
 package(default_visibility = ["//visibility:public"])
 
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+## The Gazelle directive should not be necessary if you are using go.mod.
+# gazelle:prefix github.com/abitofhelp/bazel_monorepo_go_rust
+# gazelle:exclude vendor
+gazelle(name = "gazelle")
+
 load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(

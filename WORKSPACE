@@ -9,7 +9,10 @@ GO_VERSION = "1.21.3"
 
 RULES_GO_VERSION = "0.42.0"
 
-RUST_VERSIONS = [ "1.73.0", "nightly/2023-11-12" ]
+RUST_VERSIONS = [
+    "1.73.0",
+    "nightly/2023-11-12",
+]
 
 RULES_RUST_VERSION = "0.30.0"
 
@@ -44,12 +47,16 @@ http_archive(
 )
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("//:go_deps.bzl", "go_dependencies")
+
+# gazelle:repository_macro go_deps.bzl%go_dependencies
+go_dependencies()
 
 gazelle_dependencies()
 
-load("//pkg/golang/src/grpc_client_lib:go_deps.bzl", "go_dependencies")
+load("go_deps.bzl", "go_dependencies")
 
-# gazelle:repository_macro pkg/golang/src/grpc_client_lib/go_deps.bzl%go_dependencies
+#### gazelle:repository_macro go_deps.bzl%go_dependencies
 go_dependencies()
 ########################################################################################################################
 
@@ -74,7 +81,7 @@ load("@rules_rust//crate_universe:repositories.bzl", "crate_universe_dependencie
 
 crate_universe_dependencies()
 
-load("@rules_rust//crate_universe:defs.bzl", "crates_repository", "crate")
+load("@rules_rust//crate_universe:defs.bzl", "crate", "crates_repository")
 
 crates_repository(
     name = "crate_index",
